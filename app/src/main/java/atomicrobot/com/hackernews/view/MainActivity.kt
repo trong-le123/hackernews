@@ -47,8 +47,8 @@ class MainActivity : AppCompatActivity() {
 
         getTopStories.enqueue(object : Callback<List<Long>> {
             override fun onResponse(call: Call<List<Long>>?, response: Response<List<Long>>?) {
-                for (list: Long in response!!.body()!!) {
-                    val getStoryItem = apiInterface.getStoryItem(list)
+                for (i in 0 until 15) {
+                    val getStoryItem = apiInterface.getStoryItem(response!!.body()!![i])
                     getStoryItem.enqueue(object : Callback<Post> {
                         override fun onResponse(call: Call<Post>, response: Response<Post>) {
                             post.add(response.body()!!)
