@@ -12,6 +12,8 @@ import android.widget.Toast
 import atomicrobot.com.hackernews.R
 import atomicrobot.com.hackernews.data.model.Comments
 import butterknife.ButterKnife
+import org.ocpsoft.prettytime.PrettyTime
+import java.util.*
 
 class CommentAdapter(private val context: Context, private var commentList: ArrayList<Comments?>) : RecyclerView.Adapter<CommentAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -23,7 +25,7 @@ class CommentAdapter(private val context: Context, private var commentList: Arra
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.username.text = commentList[position]?.getBy()
-        holder.postTime.text = commentList[position]?.getTime().toString()
+        holder.postTime.text = PrettyTime().format(Date(commentList[position]?.getTime()?.toLong()!! * 1000))
         if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             holder.comment.text = Html.fromHtml(commentList[position]?.getText(), Html.FROM_HTML_MODE_LEGACY)
         } else {
