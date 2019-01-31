@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.widget.LinearLayout
 import atomicrobot.com.hackernews.R
 import atomicrobot.com.hackernews.adapter.CommentAdapter
@@ -35,8 +36,8 @@ class CommentActivity : AppCompatActivity() {
 
     private fun fetchData(commentList: ArrayList<Int>) {
         val apiInterface = APIClient.client.create(APIConstants::class.java)
-        for(i in commentList){
-            val getComments = apiInterface.getCommentItem(i)
+        for(i in 0 until commentList.size-1){
+            val getComments = apiInterface.getCommentItem(commentList[i])
             getComments.enqueue(object: Callback<Comments> {
                 override fun onResponse(call: Call<Comments>, response: Response<Comments>) {
                     comment.add(response.body())
@@ -44,7 +45,7 @@ class CommentActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<Comments>, t: Throwable) {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                    Log.e("Response error", "error")
                 }
 
             })

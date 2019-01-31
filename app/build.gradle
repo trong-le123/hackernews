@@ -47,7 +47,6 @@ dependencies {
     //Pretty Time
     implementation 'org.ocpsoft.prettytime:prettytime:3.2.7.Final'
 
-
     implementation 'com.amitshekhar.android:android-networking:1.0.0'
 
     testImplementation 'junit:junit:4.12'

@@ -61,11 +61,11 @@ class Post {
         this.id = id
     }
 
-    fun getKids(): ArrayList<Int> {
-        return kids!!
+    fun getKids(): ArrayList<Int>? {
+        return kids
     }
 
-    fun setKids(kids: ArrayList<Int>) {
+    fun setKids(kids: ArrayList<Int>?) {
         this.kids = kids
     }
 

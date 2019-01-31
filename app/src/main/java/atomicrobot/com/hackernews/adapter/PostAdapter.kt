@@ -4,7 +4,6 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -49,7 +48,7 @@ class PostAdapter(private val context: Context, private var postList: ArrayList<
             }
         }
         holder.commentsButton.setOnClickListener {
-            commentView(postList[position].getKids())
+            commentView(postList[position].getKids()!!)
         }
     }
 

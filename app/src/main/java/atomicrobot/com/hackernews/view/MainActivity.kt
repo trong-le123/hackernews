@@ -37,10 +37,16 @@ class MainActivity : AppCompatActivity() {
         postAdapter = PostAdapter(this, post)
         recyclerView.adapter = postAdapter
 
-        fetchData()
+        if (shared!!.all == null) {
+            fetchData()
+        } else {
+            loadData()
+        }
     }
 
     private fun fetchData() {
+        val editor = shared!!.edit()
+        val set = HashSet<String>()
         progress(true)
         val apiInterface = APIClient.client.create(APIConstants::class.java)
         val getTopStories = apiInterface.getTopStories()
@@ -48,6 +54,9 @@ class MainActivity : AppCompatActivity() {
         getTopStories.enqueue(object : Callback<List<Long>> {
             override fun onResponse(call: Call<List<Long>>?, response: Response<List<Long>>?) {
                 for (i in 0 until 15) {
+                    set.add(response!!.body()!![i].toString())
+                    editor.putStringSet("postId", set)
+                    editor.apply()
                     val getStoryItem = apiInterface.getStoryItem(response!!.body()!![i])
                     getStoryItem.enqueue(object : Callback<Post> {
                         override fun onResponse(call: Call<Post>, response: Response<Post>) {
@@ -67,6 +76,26 @@ class MainActivity : AppCompatActivity() {
                 Log.e("Response error", "error")
             }
         })
+    }
+
+    private fun loadData() {
+        val apiInterface = APIClient.client.create(APIConstants::class.java)
+        val data = shared!!.getStringSet("postId", null)!!
+        for (i in 0 until data.size) {
+            Log.e("Jesus", data.elementAt(i))
+            val getStoryItem = apiInterface.getStoryItem(data.elementAt(i).toLong())
+            getStoryItem.enqueue(object : Callback<Post> {
+                override fun onResponse(call: Call<Post>, response: Response<Post>) {
+                    post.add(response.body()!!)
+                    progress(false)
+                    postAdapter?.notifyDataSetChanged()
+                }
+
+                override fun onFailure(call: Call<Post>, t: Throwable) {
+                    Log.e("Response error", "error")
+                }
+            })
+        }
     }
 
     private fun progress(bool: Boolean) {
